@@ -1,0 +1,947 @@
+<html>
+<head>
+    <title>HDF5 Software Changes</title>
+<link href="../ed_styles/GenElect.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF">
+  
+<!-- #BeginLibraryItem "/ed_libs/styles_Gen.lbi" -->
+<!--
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  * Copyright by The HDF Group.                                               *
+  * Copyright by the Board of Trustees of the University of Illinois.         *
+  * All rights reserved.                                                      *
+  *                                                                           *
+  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
+  * terms governing use, modification, and redistribution, is contained in    *
+  * the files COPYING and Copyright.html.  COPYING can be found at the root   *
+  * of the source code distribution tree; Copyright.html can be found at the  *
+  * root level of an installed copy of the electronic HDF5 document set and   *
+  * is linked from the top-level documents page.  It can also be found at     *
+  * http://www.hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have      *
+  * access to either file, you may request a copy from help@hdfgroup.org.     *
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ -->
+<!-- #EndLibraryItem --><!-- #BeginLibraryItem "/ed_libs/NavBar_ADevG.lbi" -->
+<hr />
+<center>
+<table border="0" width="98%">
+<tr><td valign="top" align="left">
+    <a href="../index.html">HDF5 documents and links</a>&nbsp;<br>
+    <a href="../H5.intro.html">Introduction to HDF5</a>&nbsp;<br>
+    <!--
+    <a href="Glossary.html">Glossary</a><br>
+    -->
+</td>
+<td valign="top" align="right">
+    <a href="../UG/HDF5_Users_Guide-Responsive HTML5/index.html">HDF5 User&rsquo;s Guide</a>&nbsp;<br>
+    <a href="../RM/RM_H5Front.html">HDF5 Reference Manual</a>&nbsp;<br>
+    <a href="../ADGuide.html">HDF5 Application Developer's Guide</a>&nbsp;<br>
+</td></tr>
+</table>
+</center>
+<hr />
+<!-- #EndLibraryItem -->
+
+<br />
+<center>
+<h1>HDF5 Software Changes from Release to Release</h1>
+</center>
+<br />
+
+
+<!-- *********************************************************** -->
+<!-- IN THIS FILE, DOCUMENT ONLY                                 -->
+<!--   - interface changes and                                   -->
+<!--   - changes in library or tool behavior that might affect   -->
+<!--         an application.                                     -->
+<!-- *********************************************************** -->
+
+
+<p>This document is designed to help developers maintain 
+HDF5-based applications as they are used with successive releases
+of HDF5.
+To that end, this document lists the changes at each release that
+a maintenance developer needs to be aware of:
+<ul>
+    <li>New or changed features or tools
+    <li>Syntax and behavioral changes in the existing application 
+        programming interface (the API) 
+    <li>Certain types of changes in configuration or build processes 
+</ul></p>
+
+<p>Bugfixes and performance enhancements in the C library 
+are automatically picked up by the C++ and Fortran libraries.  
+The Java library will pick up the same bugfixes and enhancements
+at its next subsequent release as it is always built with
+the latest released version of the C library.
+
+<p>The release notes also list changes made to the library, but these 
+notes tend to be more at a more detail oriented level. The release 
+notes may include new features, bugs fixed, supported configuration 
+features, platforms on which the library has been tested, and known 
+problems. The release note files are listed below and can be found 
+at the top level of the HDF5 source code tree in the release_docs 
+directory of the distributed HDF5 source code.</p>
+
+<dir>
+<table>
+
+<tr><td style="padding-right:10px">
+    <a href="http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/release_docs/RELEASE.txt" 
+    target="ExtWin"><code>RELEASE.txt</code></a></td>
+    <td style="padding-right:10px">Technical notes regarding the current release 
+    of the HDF5 Library 
+    </td></tr>
+
+<tr><td style="padding-right:10px">
+    <a href="http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/release_docs/HISTORY-1_8.txt" 
+    target="ExtWin"><code>HISTORY-1_8.txt</code></a></td>
+    <td style="padding-right:10px">Technical notes for previous 1.8 
+    releases of the HDF5 Library by release
+    </td></tr>
+
+<tr valign="top"><td style="padding-right:10px">
+    <a href="http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/release_docs/HISTORY-1_0-1_8_0_rc3.txt" 
+    target="ExtWin"><code>HISTORY-1_0-1_8_0_rc3.txt</code></a>
+    <br >
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></td>
+    <td style="padding-right:10px">Technical notes for releases prior 
+    to the 1.8.0 release of the HDF5 Library by release
+    </td></tr>
+
+</table>
+</dir>
+
+<p><strong>Are you porting an existing application from 
+HDF5 Release 1.6.x to HDF5 Release 1.8.x?</strong>
+<br />
+If you are porting an existing application 
+from any HDF5 version in the Release 1.6.x series 
+to any version in the Release 1.8.x series, 
+refer to &ldquo;<a href="../ADGuide/WhatsNew180.html">What's New in 
+HDF5 1.8.0</a>&rdquo;.
+This document, with the documents linked in its introduction,
+provides a guide to the changes introduced in the transition 
+from the 1.6.x series to HDF5 Release 1.8.0
+and discussions of various compatibility issues.</p>
+
+<br />
+
+
+<!-- TABLE TO REGULATE PRINTED PAGE WIDTH -->
+<!--
+<table><tr><td>
+<font color="white">
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+</font>
+</td></tr></table>
+-->
+<!-- END REGULATING TABLE -->
+
+
+
+<!-- MATERIAL DELAYED FROM 18.15 TO 1.8.16
+<a name="1816">
+<h2>Release 1.8.16 of November 2015 (current release) versus Release 1.8.15</h2>
+</a>
+<dir>
+
+This section lists interface-level changes and 
+other user-visible changes in behavior 
+in the transition from HDF5 Release 1.8.15 to Release 1.8.16.
+
+    <h3>New and Changed Functions, Classes, Subroutines, Wrappers, 
+        and Macros</h3>
+        <dir>
+        <dl>    
+            <dt><strong>In the C Interface (main library)</strong>
+                </dt>
+
+            <dt>The following new C functions have been added:
+                </dt>
+            <dd>To enable a single write or read call to operate 
+                on multiple datasets:
+                <ul>
+                <li><a href="../RM/RM_H5D.html#Dataset-WriteMulti">
+                    <code>H5Dwrite_multi</code></a>
+                <li><a href="../RM/RM_H5D.html#Dataset-ReadMulti">
+                    <code>H5Dread_multi</code></a>
+                <li>Related struct: <code>H5D_rw_multi_t</code>
+                </ul>
+                </dd>
+
+
+            </dl>    
+            <font color="brown"><i>
+            These functions are included? not included?
+            </i></font>
+
+        </dl>    
+        </dir>
+</dir>
+-->
+
+
+<!--
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />
+-->
+
+ 
+<a name="1816">
+<h2>Release 1.8.16 of November 2015 (current release) versus Release 1.8.15</h2>
+</a>
+<dir>
+
+
+This section lists interface-level changes and 
+other user-visible changes in behavior 
+in the transition from HDF5 Release 1.8.15 to Release 1.8.16.
+
+    <h3>New and Changed Functions, Classes, Subroutines, Wrappers, 
+        and Macros</h3>
+        <dir>
+        <dl>    
+            <dt><strong>In the C Interface (main library)</strong>
+                </dt>
+
+            <dt>New HDF5 Plugin Interface (H5PL) 
+                </dt>
+                <dd>A new HDF5 Plugin Interface (H5PL), enabling 
+                    programmatic control of dynamically loaded plugins, 
+                    was introduced at HDF5 Release 1.8.15.
+                    This interface was only partially documented at that time, 
+                    but more complete documentation is now available:
+                    <ul>
+                    <li>&ldquo;<a href="../Advanced/DynamicallyLoadedFilters/index.html">Dynamic 
+                        Plugins in HDF5</a>&rdquo; 
+                        in <i>Advanced Topics in HDF5</i> 
+                        </li>
+                    <li>&ldquo;<a href="../RM/RM_H5PL.html">H5PL: 
+                        Plugin Interface</a>&rdquo; 
+                        in the <i>HDF5 Reference Manual</i>
+                        </li>
+                        <ul>
+                        <li><a href="../RM/RM_H5PL.html#Plugin-SetLoadingState">
+                            <code>H5PLset_loading_state</code></a>
+                        </li>
+                        <li><a href="../RM/RM_H5PL.html#Plugin-GetLoadingState">
+                            <code>H5PLget_loading_state</code></a>
+                        </li>
+                        </ul>
+                    </ul>
+                </dd>
+
+            <p />
+            <dt>The following new C function has been added:
+                </dt>
+                <dd>This function reports whether the linked
+                    version of the HDF5 Library was built 
+                    with the thread-safety feature enabled.
+                    <ul>
+                    <li><a href="../RM/RM_H5.html#Library-IsLibraryThreadsafe">
+                        <code>H5is_library_threadsafe</code></a>
+                    </ul>
+                    </dd>
+
+            <p />
+            <dt>The following flag has been removed:
+                </dt>
+                <dd><code>H5F_ACC_DEBUG</code> flag for 
+                    <code>H5Fopen/create</code>
+                    <font size="1"><br />&nbsp;<br /></font>
+                    The flag <code>H5F_ACC_DEBUG</code> was used to provide 
+                    extra debugging information for HDF Library developers.
+                    This flag and the underlying functionality have been 
+                    removed from the library due to disuse. 
+                    The symbol remains defined since it was visible in
+                    <code>H5Fpublic.h</code>, but it has been set to 
+                    zero&nbsp;(<code>0</code>) and has no effect anywhere 
+                    in the library.
+                    <ul>
+                    <li><a href="../RM/RM_H5F.html#File-Open">
+                        <code>H5Fopen</code></a>
+                    </ul>
+                    </dd>
+
+            <p>
+            <dt><strong>In the C++ Interface</strong>
+                </dt>
+
+            <dt>The following features have been added:
+                </dt>
+                <dd>
+                <li>New class <code>H5::ObjCreatPropList</code>
+                    for the object creation property list class
+                    <p />
+                    The new class <code>H5::ObjCreatPropList</code>
+                    is derived from <code>H5::PropList</code> and
+                    is a baseclass of <code>H5::DSetCreatPropList</code>.  
+                    Additional property list classes will be added to 
+                    the library in future releases and some of those will
+                    be derived from <code>H5::ObjCreatPropList</code>.
+                    </li>
+                <li>New wrappers for the C functions 
+                    <code>H5P[s/g]et_attr_phase_change</code> and
+                    <code>H5P[s/g]et_attr_creation_order</code>
+                    <p />
+                    The following wrappers were added to the class 
+                    <code>H5::ObjCreatPropList</code> 
+                    for the respective C functions:
+                    <table>
+                    <tr><td align="left"><u>C Function</u></th>
+                        <td align="left"><u>C++ Wrapper</u></th>
+                        </tr>
+                    <tr>
+                        <td><code>H5Pset_attr_phase_change</code></td>
+                        <td><code>H5::ObjCreatPropList::setAttrPhaseChange
+                                </code></td>
+                        </tr>
+                    <tr>
+                        <td><code>H5Pget_attr_phase_change</code></td>
+                        <td><code>H5::ObjCreatPropList::getAttrPhaseChange
+                                </code></td>
+                        </tr>
+                    <tr>
+                        <td><code>H5Pset_attr_creation_order</code></td>
+                        <td><code>H5::ObjCreatPropList::setAttrCrtOrder
+                                </code></td>
+                        </tr>
+                    <tr>
+                        <td><code>H5Pget_attr_creation_order&nbsp;&nbsp;
+                                </code></td>
+                        <td><code>H5::ObjCreatPropList::getAttrCrtOrder
+                                </code></td>
+                        </tr>
+                    </table>
+                    </li>
+
+                    </dd>
+
+        </dl>
+        </dir>
+
+
+    <h3>Library Configuration</h3>
+        <dir>
+        <dl>    
+            <p />
+            <dt>Use of thread-safety with the HDF5 High-level Library
+                has been declared unsupported in the build tools: 
+                Autotools and CMake.
+                <br />&nbsp;
+                </dt>
+                <dd>The global lock used by the thread-safety mechanism 
+                    is not raised to the high-level library level, 
+                    making it possible that the library state could change 
+                    if a context switch were to occur in a high-level library 
+                    call. Because of this, the combination of thread-safety 
+                    and the high-level library is officially unsupported by
+                    The HDF Group.
+                    <p>
+                    Though this combination has never been supported in HDF5, 
+                    this was not enforced by the build systems. 
+                    With this release, the combination has been explicitly 
+                    flagged as unsupported in Autotools and CMake, 
+                    the build systems used with HDF5.
+                    <p>
+                    The new unsupported declaration will cause an Autotools 
+                    configure step to fail if <code>--enable-threadsafe</code> 
+                    and <code>--enable-hl</code> are combined unless 
+                    additional options are specified (see below).
+                    Since the high-level library is built by default, 
+                    this means that these extra configuration options will 
+                    need to be used any time <code>--enable-threadsafe</code> 
+                    is selected.
+                    <p>
+                    To use Autotools to build an application with 
+                    <code>--enable-threadsafe</code>, 
+                    use one of the following approaches:
+                    <ul>
+                        <li>Use <code>--disable-hl</code> to disable the 
+                            high-level library. 
+                            <i>(Recommended)</i>
+                            </li>
+                        <li>Use <code>--enable-unsupported</code> to build the 
+                            high-level library with the thread-safety feature. 
+                            </li>
+                    </ul>
+                    <p>
+                    To use CMake to build an application with 
+                    <code>HDF5_ENABLE_THREADSAFE=ON</code>, 
+                    use one of the following approaches:
+                    <ul>
+                        <li>Use <code>HDF5_BUILD_HL_LIB=OFF</code> 
+                            to disable the high-level library. 
+                            <i>(Recommended)</i>
+                            </li>
+                        <li>Use <code>HDF5_ALLOW_UNSUPPORTED=ON</code> 
+                            to build the high-level library with the 
+                            thread-safety feature. 
+                            </li>
+                    </ul>
+                    <p>
+                    Since this combination is unsupported, applications 
+                    using it must be carefully tested for potential 
+                    thread-safety failures.
+                </dd>    
+
+
+        </dl>
+        </dir>
+
+    <h3>Compatibility Notes and Report</h3>
+        <dir>
+        <dl>    
+            <dt><strong>Decoupled shared object version numbers 
+                (<code>soname</code>)</strong>
+                </dt>
+                <dd>Shared object version numbers, <code>soname</code>, 
+                    for HDF5 wrapper libraries, 
+                    such as the C++ and Fortran libraries, 
+                    have been decoupled from the shared object version 
+                    number for the HDF5 library.  
+                    In this and future releases, each library&rsquo;s
+                    <code>soname</code> will be maintained on an 
+                    individual basis according to the interface changes 
+                    specific to each wrapper library.
+                    <p />
+                </dd>
+
+            <dt><strong>Changed shared library interface version 
+                numbers (<code>soname</code>)</strong>
+                </dt>
+                <dd>
+                    For HDF5 Release 1.8.16, the shared object version number 
+                    have changed as follows.
+                    <dir>
+                    <table width="100%" border="0">
+                    <tr valign="top" align="left">
+                      <th>Library</td>
+                      <th>Release&nbsp;1.8.15&nbsp;&nbsp;</td>
+                      <th>Release&nbsp;1.8.16&nbsp;&nbsp;</td>
+                      <th>Reason for Change</td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td>HDF5&nbsp;Library&nbsp;&nbsp;</td>
+                      <td>10.0.1</td>
+                      <td>10.1.0</td>
+                      <td>Added APIs</td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td>C++ Library</td>
+                      <td>10.0.1</td>
+                      <td>11.0.0</td>
+                      <td>Changes in existing APIs</td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td>High&dash;level&nbsp;C++ Library</td>
+                      <td>10.0.1</td>
+                      <td>11.0.0</td>
+                      <td>Changes in existing APIs</td>
+                    </tr>
+                    <tr valign="top" align="left">
+                      <td>All others</td>
+                      <td>10.0.1</td>
+                      <td>10.0.2</td>
+                      <td>Code changes that did not result in interface changes</td>
+                    </tr>
+                    </table>
+                    </dir>
+                    <p />
+                </dd>
+
+            <dt><strong>Compatibility report for Release 1.8.16 versus 
+                Release 1.8.15</strong>
+                </dt>
+                <dd>
+                    The following interface compatibility report 
+                    provides a full list of the changed symbols:
+                    <p />
+                    <a href="Compatibility_Report/CR_1.8.16.html">API 
+                    compatibility report for the HDF5 Library 
+                    between 1.8.15 and 1.8.16 versions on 
+                    x86</a>
+                </dd>
+
+<!--
+            <p>
+            <dt><strong>Changed shared library interface version 
+                number (<code>soname</code>)</strong>
+                </dt>
+                <dd>
+
+                    &lt; More detailed description of changes &gt;
+
+                    <p> 
+                    Due to these changes, some shared library interface version 
+                    numbers (<code>soname</code>) have been increased.
+                    For a full list of the changed symbols, see the
+                    interface compatibility report linked immediately above.
+                </dd>
+-->
+
+
+<!--
+            <p>
+            <dt><strong>Changed shared library interface version 
+                number (<code>soname</code>)</strong>
+                </dt>
+                <dd>In the C++ interface, two overloaded methods
+                    have been combined into a single method
+                    and one constructor has been deprecated.
+                    <p> 
+                    Due to these changes, the shared library interface version 
+                    number (<code>soname</code>) has been increased.
+                    For a full list of the changed symbols, see the
+                    interface compatibility report linked immediately above.
+                </dd>
+-->
+
+        </dl>
+        </dir>
+
+
+
+<!-- MASK 1.8.15 TO RETAIN TEMPLATE VALUE
+<a name="1815">
+<h2>Release 1.8.15 of May 2015 versus Release 1.8.14</h2>
+</a>
+<dir>
+
+This section lists interface-level changes and 
+other user-visible changes in behavior 
+in the transition from HDF5 Release 1.8.14 to Release 1.8.15.
+
+    <h3>New and Changed Functions, Classes, Subroutines, Wrappers, 
+        and Macros</h3>
+        <dir>
+        <dl>    
+            <dt><strong>In the C Interface (main library)</strong>
+                </dt>
+
+
+            <dt>The following new C functions have been added:
+                </dt>
+                <dd>Memory allocation functions that use the library&rsquo;s 
+                    allocator.
+-->
+<!--
+                    <p />
+      HDF5 filters may need to allocate or resize the buffer that is passed
+      to them from the library. If the filter has been compiled separately
+      from the library, it and the library may use different memory
+      allocation libraries for the (re)allocation and free calls. This can
+      cause heap corruption and crashes. This is particularly a problem on
+      Windows since each C run-time library is implemented as a separate
+      shared library, but can also show up on POSIX systems when debug or
+      high-performance allocation libraries are in use.
+                    <p />
+
+      Two new functions (H5allocate_memory() and H5resize_memory()) were
+      added to the HDF5 C library. These functions have the same semantics as
+      malloc/calloc and realloc, respectively. Their primary purpose is to
+      allow filter authors to allocate or resize memory using the same
+      memory allocation library as the HDF5 library. Filter authors are
+      highly encouraged to use these new functions in place of malloc,
+      calloc, and realloc. They should also use the H5free_memory() call when
+      freeing memory.
+                    <p />
+
+      Note that the filters provided with the library (zlib, szip, etc.) do
+      not experience the problems that these new functions are intended to
+      fix. This work only applies to third-party filters that are compiled
+      separately from the library.
+-->
+<!--
+                    <ul>
+                    <li><a href="../RM/RM_H5.html#Library-AllocateMemory">
+                        <code>H5allocate_memory</code></a>
+                    <li><a href="../RM/RM_H5.html#Library-ResizeMemory">
+                        <code>H5resize_memory</code></a>
+                    </ul>
+                    </dd>
+
+                <p>
+                <dd>The following functions enable programmatic control 
+                    of the loading of dynamic plugin filters 
+                    in user applications:
+                    <ul>
+-->
+<!--
+                    <li><a href="../RM/RM_H5PL.html#Plugin-SetLoadingState">
+                        <code>H5PLset_loading_state</code></a>
+                    <li><a href="../RM/RM_H5PL.html#Plugin-GetLoadingState">
+                        <code>H5PLget_loading_state</code></a>
+-->
+<!--
+                    <li><code>H5PLset_loading_state</code>
+                    <li><code>H5PLget_loading_state</code>
+                    <i>
+                    <br />
+                    For preliminary documentation, see
+                    &ldquo;<a href="../Advanced/DynamicallyLoadedFilters/HDF5_Dynamic_Plugin_Programatic_Control(Preliminary).pdf">New 
+                    HDF5 APIs Provide Programmatic Control of Dynamic 
+                    Plugins</a>.&rdquo;
+                    <br />
+                    Final documentation is anticipated in July 2015.
+                    </i>
+                    </ul>
+                    </dd>
+
+-->
+<!--
+            <p>
+            <dt>Discussion
+                </dt>
+                <dd>Further elaboration
+                    </dd>
+
+-->
+<!--
+            <dt>The following new C functions have been added:
+                </dt>
+            <dd>To enable a single write or read call to operate 
+                on multiple datasets:
+                <ul>
+                <li><a href="../RM/RM_H5D.html#Dataset-WriteMulti">
+                    <code>H5Dwrite_multi</code></a>
+                <li><a href="../RM/RM_H5D.html#Dataset-ReadMulti">
+                    <code>H5Dread_multi</code></a>
+                <li>Related struct: <code>H5D_rw_multi_t</code>
+                </ul>
+                </dd>
+
+
+            </dl>    
+            <font color="brown"><i>
+            Included for confirmation;
+            these functions are not believed to be in 1.8.15.
+            </i></font>
+
+            <p>
+            <dd><font color="brown"><i>[This document assumes that
+            <code>H5Dwrite_multi</code> and <code>H5Dread_multi</code>
+            are not to be in 1.8.15.]
+            </i></font>
+            </dd>
+
+-->
+<!--
+
+            <p>
+            <dt><strong>In the high-level library C Interface</strong>
+                </dt>
+
+-->
+<!--
+            <dt>Discussion
+                </dt>
+                <dd>Further elaboration
+                    </dd>
+-->
+<!--
+
+            <p>
+            <dt><strong>In the C++ Interface</strong>
+                </dt>
+
+            <dt>The following features have been added:
+                </dt>
+                <dd>
+                <li>New wrappers  for the C functions
+                    <code>H5Pset_libver_bounds</code> and
+                    <code>H5Pget_libver_bounds</code>
+                    <p />
+                    The following wrappers have been added to class 
+                    <code>H5::FileAccPropList</code>.  
+                    The first sets the bounds on versions of the HDF5 Library 
+                    format to be used when creating or writing objects;
+                    the second retrieves the current settings: 
+                    <pre>
+    void setLibverBounds(H5F_libver_t libver_low, H5F_libver_t libver_high) const;
+
+    void getLibverBounds(H5F_libver_t& libver_low, H5F_libver_t& libver_high) const;
+                    </pre>
+
+                <li>New wrappers to retrieve the version of an object header
+                    <p />
+                    The following wrappers have been added to class 
+                    <code>H5::CommonFG</code> to retrieve the 
+                    object header version of an object in a file or group,
+                    given the object&rsquo;s name.
+                    <pre>
+    unsigned childObjVersion(const char* objname) const;
+
+    unsigned childObjVersion(const H5std_string& objname) const;
+                    </pre>
+
+                <li>A new <code>DataType</code> constructor
+                    <p />
+                    A new <code>DataType</code> constructor takes a 
+                    <code>PredType</code> object and invokes 
+                    <code>H5Tcopy</code> to generate another datatype 
+                    identifier from a predefined datatype.
+
+                    </dd>
+
+
+            <dt>The following features have been changed:
+                </dt>
+                <dd>
+                <li>Combined <code>H5File::getObjCount</code> 
+                    overloaded methods 
+                    <p />
+                   The following methods:
+                   <pre>
+    ssize_t getObjCount(unsigned types) const;
+
+    ssize_t getObjCount() const;
+                   </pre>
+                   have been combined into the following:
+                   <pre>
+    ssize_t getObjCount(unsigned types = H5F_OBJ_ALL) const;
+                   </pre>
+
+                <li>Deprecated constructors
+                    <p />
+                    The following two constructors of the classes 
+                    <code>AbstractDs</code>,
+                    <code>IdComponent</code>,
+                    <code>H5Location</code>,
+                    and <code>H5Object</code>
+                    are no longer appropriate after the data member
+                    <code>id</code> was moved from <code>IdComponent</code>
+                    to the sub-classes in previous releases:
+                    <pre>
+    &lt;Classname&gt;(const hid_t h5_id);
+
+    &lt;Classname&gt;(const &lt;Classname&gt;& original);
+                    </pre>
+                    The copy constructors have been no-ops and are removed 
+                    in this HDF5 Release 1.8.15.  
+                    The other constructors will be removed in 
+                    HDF5 Release 1.10 and are expected to be removed
+                    from HDF5 Release 1.8.17 if their removal causes 
+                    no problems.
+
+                    </dd>
+
+            <p>
+            <dt><strong>In the Fortran Interface</strong>
+                </dt>
+
+            <dt>The following Fortran 2003 API has been added:
+                </dt>
+                <dd><a href="../RM/RM_H5T.html#Datatype-EnumInsert">
+                    <code>h5tenum_insert_f</code></a> 
+                    </dd>
+                <p>
+                <dd>Operation of the new Fortran 2003 version of this API
+                    is more consistent with the operation of the C API 
+                    than was the Fortran 90 version.
+                    </dd>
+                <dd>Users are strongly encouraged to use the Fortran 2003 API.
+                    </dd>
+
+            <p>
+            <dt>Several global variables have been added in the Fortran API.
+                These global variables are equivalent in definition 
+                to the comparable C definitions:
+                </dt>
+                <dd><pre>
+H5G_UDLINK_F
+H5G_SAME_LOC_F
+H5O_TYPE_UNKNOWN_F
+H5O_TYPE_GROUP_F
+H5O_TYPE_DATASET_F
+H5O_NAMED_DATATYPE_F
+H5O_TYPE_NTYPES_F   </pre>
+                    </dd>
+
+-->
+<!--
+            <p>
+            <dt><strong>In the high-level library Fortran Interface</strong>
+                </dt>
+
+-->
+<!--
+
+            <p>
+            <dt><strong>For parallel applications</strong>
+                </dt>
+
+            <dt>A fix for issues encountered upon calling 
+                <code>MPI_Finalize</code> without having closed everything
+                in an HDF5 file
+                <p />
+                </dt>
+                <dd>An attribute destroy callback has been attached
+                    to <code>MPI_COMM_SELF</code> that shuts down the 
+                    HDF5 Library when <code>MPI_COMM_SELF</code>
+                    is destroyed, that is, on <code>MPI_Finalize</code>. 
+                    This should fix several issues that users see when they 
+                    forget to close HDF5 objects before calling
+                    <code>MPI_Finalize()</code>.
+
+                    </dd>
+
+-->
+<!--
+            <p>
+            <dt><strong>In somewhere else</strong>
+                </dt>
+
+            <dt>Discussion
+                </dt>
+                <dd>Further elaboration
+                    </dd>
+-->
+<!--
+
+        </dl>
+        </dir>
+
+
+    <h3>Compatibility Report and Comments</h3>
+        <dir>
+        <dl>    
+            <dt><strong>Compatibility report for Release 1.8.15 versus 
+                Release 1.8.14</strong>
+                </dt>
+                <dd>
+                    <a href="Compatibility_Report/CR_1.8.15.html">API 
+                    compatibility report for the HDF5 Library 
+                    between 1.8.14 and 1.8.15 versions on 
+                    x86</a>
+                </dd>
+
+            <p>
+            <dt><strong>Changed shared library interface version 
+                number (<code>soname</code>)</strong>
+                </dt>
+                <dd>In the C++ interface, two overloaded methods
+                    have been combined into a single method
+                    and one constructor has been deprecated.
+                    <p> 
+                    Due to these changes, the shared library interface version 
+                    number (<code>soname</code>) has been increased.
+                    For a full list of the changed symbols, see the
+                    interface compatibility report linked immediately above.
+                </dd>
+
+        </dl>
+        </dir>
+
+</dir>
+-->
+<!-- END 1.8.15 MASK -->
+
+
+    <br />
+</dir>
+
+        
+
+<a name="18x">
+<h2>Prior Releases in the 1.8.x Series</h2> 
+</a>
+
+<dir>
+
+Change notes for HDF5 Release 1.8.0 to the release immediately 
+preceding the current release are published in 
+&ldquo;<a href="Changes_1_8_x.html">HDF5 Software Changes from 
+Release to Release for HDF5 Releases 1.8.x</a>&rdquo;.
+
+</dir>
+<br />
+
+
+<a name="1610">
+<h2>Releases 1.6.x and 1.4.x</h2> 
+</a>
+
+<dir>
+
+Change notes for HDF5 Release 1.6.10 and earlier releases
+are published in 
+&ldquo;<a href="Changes_1_4-1_6.html">HDF5 Software Changes from 
+Release to Release for HDF5 Releases 1.4.0 through 1.6.10</a>&rdquo;.
+
+</dir>
+<br />
+
+
+<!--
+<a name="RELEASE-HISTORY">
+<h2>This and Prior Releases: The RELEASE.txt and HISTORY.txt Files</h2>
+</a>
+
+<dir>
+    The HDF5 source code, as distributed to users and developers, 
+    contains two files that will be of interest to readers of this 
+    document.  Both files are located at the top level of the 
+    source code tree and are duplicated here for your reference:
+    <p>
+    <dl>
+      <dt><a href="RELEASE.txt" target="ExtWin">RELEASE.txt</a>
+        <dd>Technical notes regarding the release, including 
+            new features and the changes since the last release, 
+            notes regarding new or revised utilities,
+            notes regarding alternative language APIs (Fortran90, C++),
+            bugs fixed since the last release,
+            platforms on which the release has been tested, and
+            known problems. 
+            This is the file commonly known as "the release notes."
+      <p>
+      <dt><a href="HISTORY.txt" target="ExtWin">HISTORY.txt</a>
+        <dd>A release-by-release history of the HDF5 Library.  
+            This file is a compiled set of the release notes
+            (i.e., the RELEASE.txt files) from prior releases.
+    <dl>
+</dir>
+-->
+
+
+
+<!-- #BeginLibraryItem "/ed_libs/NavBar_ADevG.lbi" -->
+<hr />
+<center>
+<table border="0" width="98%">
+<tr><td valign="top" align="left">
+    <a href="../index.html">HDF5 documents and links</a>&nbsp;<br>
+    <a href="../H5.intro.html">Introduction to HDF5</a>&nbsp;<br>
+    <!--
+    <a href="Glossary.html">Glossary</a><br>
+    -->
+</td>
+<td valign="top" align="right">
+    <a href="../UG/HDF5_Users_Guide-Responsive HTML5/index.html">HDF5 User&rsquo;s Guide</a>&nbsp;<br>
+    <a href="../RM/RM_H5Front.html">HDF5 Reference Manual</a>&nbsp;<br>
+    <a href="../ADGuide.html">HDF5 Application Developer's Guide</a>&nbsp;<br>
+</td></tr>
+</table>
+</center>
+<hr>
+<!-- #EndLibraryItem -->
+
+
+<?php include("../ed_libs/Footer2.htm"); ?>
+
+<!-- Created: Spring 1999 -->
+<!-- hhmts start -->
+<hr />
+Last modified: 10 November 2015
+<!-- hhmts end -->
+<br />
+<br />
+<br />
+
+</body>
+</html>
