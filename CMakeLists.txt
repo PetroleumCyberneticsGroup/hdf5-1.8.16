@@ -650,7 +650,7 @@ endif (HDF5_ALLOW_EXTERNAL_SUPPORT MATCHES "SVN" OR HDF5_ALLOW_EXTERNAL_SUPPORT 
 #-----------------------------------------------------------------------------
 # Dashboard and Testing Settings
 #-----------------------------------------------------------------------------
-option (BUILD_TESTING "Build HDF5 Unit Testing" ON)
+option (BUILD_TESTING "Build HDF5 Unit Testing" OFF)
 if (BUILD_TESTING)
   set (DART_TESTING_TIMEOUT 1200
       CACHE INTEGER
@@ -690,7 +690,7 @@ endif (BUILD_TESTING)
 # Option to build HDF5 Tools
 #-----------------------------------------------------------------------------
 if (EXISTS "${HDF5_SOURCE_DIR}/tools" AND IS_DIRECTORY "${HDF5_SOURCE_DIR}/tools")
-  option (HDF5_BUILD_TOOLS  "Build HDF5 Tools" ON)
+    option (HDF5_BUILD_TOOLS  "Build HDF5 Tools" OFF)
   if (HDF5_BUILD_TOOLS)
     add_subdirectory (${HDF5_SOURCE_DIR}/tools ${PROJECT_BINARY_DIR}/tools)
   endif (HDF5_BUILD_TOOLS)
@@ -700,7 +700,7 @@ endif (EXISTS "${HDF5_SOURCE_DIR}/tools" AND IS_DIRECTORY "${HDF5_SOURCE_DIR}/to
 # Option to build examples
 #-----------------------------------------------------------------------------
 if (EXISTS "${HDF5_SOURCE_DIR}/examples" AND IS_DIRECTORY "${HDF5_SOURCE_DIR}/examples")
-  option (HDF5_BUILD_EXAMPLES  "Build HDF5 Library Examples" ON)
+    option (HDF5_BUILD_EXAMPLES  "Build HDF5 Library Examples" OFF)
   if (HDF5_BUILD_EXAMPLES)
     add_subdirectory (${HDF5_SOURCE_DIR}/examples ${PROJECT_BINARY_DIR}/examples)
   endif (HDF5_BUILD_EXAMPLES)
